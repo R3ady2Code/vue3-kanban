@@ -1,26 +1,25 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png" />
-  <HelloWorld msg="Welcome to Your Vue.js App" />
+  <div class="app">
+    <div class="layout">
+      <Sidebar />
+      <Header />
+    </div>
+    <Kanban />
+  </div>
 </template>
 
 <script>
-import HelloWorld from "./components/HelloWorld.vue";
+import Sidebar from './components/Sidebar.vue';
+import Header from './components/Header.vue';
+import Kanban from './components/Kanban.vue';
 
 export default {
   name: "App",
-  components: {
-    HelloWorld,
+  components: { Sidebar, Header, Kanban },
+
+  async mounted() {
+    this.projects = (await this.$store.dispatch('fetchProjects')).map(p => p.title)
+    this.loading = false
   },
 };
 </script>
-
-<style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>

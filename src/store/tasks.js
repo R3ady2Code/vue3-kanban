@@ -2,22 +2,21 @@ import firebase from 'firebase/compat/app';
 
 export default {
   actions: {
-    async createTask({ getters }, { taskTitle, deadline, hours, columnId }) {
+    async createTask({ getters }, { taskTitle, deadline = '', hours = '', columnId }) {
       try {
-        console.log(taskTitle, deadline, hours);
         const projectId = getters.getSelectedProjectId;
-        const column = await firebase
+        const task = await firebase
           .database()
           .ref(`/projects/${projectId}/columns/${columnId}/tasks`)
-          .push({ taskTitle, deadline, hours, createDate: Date.now() });
-        return { taskTitle, createDate: Date.now(), id: column.key };
+          .push({ taskTitle, deadline, hours, createDate: Date.now(), completed: false });
+        return { taskTitle, createDate: Date.now(), id: task.key };
       } catch (error) {
         console.log(error);
         throw error;
       }
     },
 
-    async fetchTasks(arg, projectId, columnId) {
+    async fetchTasks(arg, { projectId, columnId }) {
       try {
         const tasks =
           (
@@ -33,5 +32,21 @@ export default {
         throw error;
       }
     },
+
+    async updateTask({ getters }, { taskId, columnId, ...task }) {
+      try {
+        const projectId = getters.getSelectedProjectId;
+        await firebase
+          .database()
+          .ref(`/projects/${projectId}/columns/${columnId}/tasks`)
+          .child(taskId)
+          .update({ ...task, completed: !task.completed });
+        console.log('completed!)');
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
+    async isTaskCompleted() {},
   },
 };

@@ -18,10 +18,9 @@ export default {
     },
   },
   actions: {
-    async createProject({ commit }, title) {
+    async createProject(arg, title) {
       try {
         const project = await firebase.database().ref(`/projects`).push({ title });
-        commit('setSelectedProject', project);
         return { title, id: project.key };
       } catch (error) {
         console.log(error);
@@ -29,14 +28,16 @@ export default {
       }
     },
 
-    async fetchProjects({ commit }) {
+    async fetchProjects({ commit }, dontSet) {
       try {
         const projects = (await firebase.database().ref(`/projects`).once('value')).val() || {};
 
-        commit(
-          'setSelectedProject',
-          { title: projects[Object.keys(projects)[0]].title, id: Object.keys(projects)[0] } || '',
-        );
+        if (!dontSet) {
+          commit(
+            'setSelectedProject',
+            { title: projects[Object.keys(projects)[0]].title, id: Object.keys(projects)[0] } || '',
+          );
+        }
 
         return Object.keys(projects).map((key) => ({ ...projects[key], id: key }));
       } catch (error) {

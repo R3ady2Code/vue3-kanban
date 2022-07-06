@@ -9,8 +9,8 @@
 </template>
 
 <script>
-import Sidebar from './components/Sidebar.vue';
-import Header from './components/Header.vue';
+import Sidebar from './components/Layout/Sidebar.vue';
+import Header from './components/Layout/Header.vue';
 import Kanban from './components/Kanban.vue';
 
 export default {
@@ -19,7 +19,6 @@ export default {
 
   async mounted() {
     this.projects = (await this.$store.dispatch('fetchProjects')).map(p => p.title)
-    this.loading = false
   },
 };
 </script>

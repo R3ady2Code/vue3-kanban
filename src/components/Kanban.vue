@@ -14,7 +14,7 @@
 			</div>
 		</div>
 		<div class="kanban__content">
-			<Column v-for="column in columns" :key="column.id" :column="column" />
+			<Column v-for="column in columns" :key="column.id" :column="column" :removeColumn="removeColumn" />
 			<CreationColumn :addColumn="addColumn" v-if="visibleAddInput"
 				v-click-outside="() => this.visibleAddInput = false" />
 			<h4 v-else @click="visibleAddInput = true">+ Добавить столбец</h4>
@@ -23,8 +23,8 @@
 </template>
 
 <script>
-import Column from './Column'
-import CreationColumn from './CreationColumn'
+import Column from './Column/Column'
+import CreationColumn from './Column/CreationColumn'
 
 export default {
 	data: () => ({
@@ -36,7 +36,7 @@ export default {
 		CreationColumn
 	},
 	async mounted() {
-		await this.$store.dispatch('fetchProjects')
+		await this.$store.dispatch('fetchProjects', true)
 		this.columns = await this.$store.dispatch('fetchProjectColumns', this.$store.getters.getSelectedProjectId)
 		this.$store.watch(() => this.$store.getters.getSelectedProjectId, async (id) => this.columns = await this.$store.dispatch('fetchProjectColumns', id), { deep: true })
 
@@ -45,11 +45,15 @@ export default {
 		async addColumn(title) {
 			try {
 				const column = await this.$store.dispatch('createColumn', title)
-				this.columns.push(column.title)
+				this.columns.push(column)
 				this.visibleAddInput = false
 			} catch (error) {
 				console.log(error)
 			}
+		},
+		async removeColumn(id) {
+			await this.$store.dispatch('removeColumn', id)
+			this.columns = this.columns.filter(column => column.id !== id)
 		}
 	}
 }

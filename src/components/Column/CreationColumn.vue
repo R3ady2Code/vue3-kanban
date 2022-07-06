@@ -3,7 +3,7 @@
 		<div class="column__header">
 			<input type="text" placeholder="Название колонки..." autofocus v-model="columnTitle"
 				:class="{ invalid: v$.columnTitle.$error }" v-on:keyup.enter="onClickPlus(columnTitle)" />
-			<img src="../../public/img/icons/plus_black.svg" alt="plus" @click="onClickPlus(columnTitle)"
+			<img src="../../../public/img/icons/plus_black.svg" alt="plus" @click="onClickPlus(columnTitle)"
 				style="cursor: pointer">
 		</div>
 	</div>

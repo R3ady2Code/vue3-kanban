@@ -28,5 +28,14 @@ export default {
         throw error;
       }
     },
+
+    async removeColumn({ getters }, columnId) {
+      try {
+        const projectId = getters.getSelectedProjectId;
+        await firebase.database().ref(`/projects/${projectId}/columns/${columnId}`).remove();
+      } catch (error) {
+        console.log(error);
+      }
+    },
   },
 };

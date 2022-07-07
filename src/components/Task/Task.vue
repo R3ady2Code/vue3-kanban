@@ -32,8 +32,8 @@
 	</div>
 	<transition name="slide-fade">
 		<ModalTask v-if="visibleModalTask" v-click-outside="() => closeModal()" :task="task" :subtasks="subtasks"
-			:hoursAgo="hoursAgo" :closeModal="closeModal" :createSubtask='createSubtask'
-			:updateSubtask="updateSubtask" />
+			:hoursAgo="hoursAgo" :closeModal="closeModal" :createSubtask='createSubtask' :updateSubtask="updateSubtask"
+			:columnId="columnId" />
 	</transition>
 </template>
 

@@ -8,7 +8,14 @@ export default {
         const task = await firebase
           .database()
           .ref(`/projects/${projectId}/columns/${columnId}/tasks`)
-          .push({ taskTitle, deadline, hours, createDate: Date.now(), completed: false });
+          .push({
+            taskTitle,
+            deadline,
+            hours,
+            createDate: Date.now(),
+            completed: false,
+            description: '',
+          });
         return { taskTitle, createDate: Date.now(), id: task.key };
       } catch (error) {
         console.log(error);
@@ -41,12 +48,22 @@ export default {
           .ref(`/projects/${projectId}/columns/${columnId}/tasks`)
           .child(taskId)
           .update({ ...task, completed: !task.completed });
-        console.log('completed!)');
       } catch (error) {
         console.log(error);
       }
     },
 
-    async isTaskCompleted() {},
+    async addDescription({ getters }, { taskId, columnId, description, ...task }) {
+      try {
+        const projectId = getters.getSelectedProjectId;
+        await firebase
+          .database()
+          .ref(`/projects/${projectId}/columns/${columnId}/tasks`)
+          .child(taskId)
+          .update({ ...task, description: description });
+      } catch (error) {
+        console.log(error);
+      }
+    },
   },
 };

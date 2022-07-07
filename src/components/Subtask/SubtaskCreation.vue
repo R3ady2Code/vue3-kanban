@@ -1,8 +1,7 @@
 <template>
 	<div class="subtask">
 		<div class="creation">
-			<input type="text" placeholder="Название подзадачи..." v-model="title" v-on:keyup.enter="addSubtask"
-				:class="{ invalid: v$.columnTitle.$error }">
+			<input type="text" placeholder="Название подзадачи..." v-model="title" v-on:keyup.enter="addSubtask">
 			<button @click="addSubtask">+</button>
 		</div>
 	</div>
@@ -13,8 +12,19 @@ import useVuelidate from '@vuelidate/core'
 import { required } from '@vuelidate/validators'
 
 export default {
+	data: () => ({
+		title: ""
+	}),
 	props: {
 		createSubtask: Function
+	},
+	setup() {
+		return { v$: useVuelidate() }
+	},
+	validations() {
+		return {
+			title: { required }
+		}
 	},
 	methods: {
 		addSubtask() {
@@ -25,14 +35,6 @@ export default {
 
 			this.createSubtask(this.title)
 			this.title = ""
-		}
-	},
-	setup() {
-		return { v$: useVuelidate() }
-	},
-	validations() {
-		return {
-			taskTitle: { required }
 		}
 	},
 }

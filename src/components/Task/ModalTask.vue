@@ -32,7 +32,10 @@
 					</tr>
 					<tr id="desc">
 						<th>Описание</th>
-						<td> <input type="text" placeholder="Добавьте описание к этой задаче..."> </td>
+						<td> <input type="text" placeholder="Добавьте описание к этой задаче..."
+								v-model="task.description"
+								v-bind="$store.dispatch('addDescription', { description: task.description, taskId: task.id, columnId, ...task })">
+						</td>
 					</tr>
 				</tbody>
 			</table>
@@ -78,7 +81,8 @@ export default {
 		hoursAgo: Number,
 		closeModal: Function,
 		createSubtask: Function,
-		updateSubtask: Function
+		updateSubtask: Function,
+		columnId: String
 	},
 	setup() {
 		return { v$: useVuelidate() }
